@@ -1,15 +1,17 @@
-.App {
-  text-align: center;
-}
-
 .wrapper {
-  min-height: 100vh; /* height of the browser viewport */
+  min-height: 80vh; /* height of the browser viewport */
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 
 .buttonFront {
   text-decoration: none;
   color: white;
+}
+
+.compWrapper {
+  text-decoration: none;
+  color: black;
 }

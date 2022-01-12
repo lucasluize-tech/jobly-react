@@ -2,17 +2,16 @@ import "./App.css";
 import Routes from "./Routes.js";
 import React, { useState, useEffect } from "react";
 import JoblyApi from "./api";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import NavBar from "./components/Navbar";
+import UserContext from "./userContext";
 
 function App() {
-  const [isLoggedin, setIsLoggedin] = useState(false);
+  const [isLoggedin, setIsLoggedin] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
   const [token, setToken] = useState(null);
   const [applicationIds, setApplicationIds] = useState(new Set());
-
-  const UserContext = React.createContext();
 
   function applyToJob(id) {
     JoblyApi.applyToJob(currentUser.username, id);
@@ -84,10 +83,10 @@ function App() {
   return (
     <div className='App'>
       <BrowserRouter>
-        <NavBar isLoggedin={isLoggedin} currentUser={currentUser} />
         <UserContext.Provider
           value={{ currentUser, setCurrentUser, applyToJob, hasAppliedToJob }}>
-          <Routes isLoggedin={isLoggedin} currentUser={currentUser} />
+          <NavBar isLoggedin={isLoggedin} logout={logout} />
+          <Routes isLoggedin={isLoggedin} login={login} signup={signup} />
         </UserContext.Provider>
       </BrowserRouter>
     </div>

@@ -1,7 +1,11 @@
 import { Switch, Route } from "react-router-dom";
 import Home from "./components/Home.js";
+import Login from "./components/Login.js";
+import Signup from "./components/Signup.js";
+import CompanyList from "./components/CompanyList.js";
 
-export default function Router({ isLoggedin, currentUser }) {
+export default function Router({ isLoggedin, login, signup }) {
+  const { currentUser } = { currentUser: { username: "lucas" } };
   return (
     <div>
       <Switch>
@@ -9,17 +13,17 @@ export default function Router({ isLoggedin, currentUser }) {
           <Home isLoggedin={isLoggedin} currentUser={currentUser} />
         </Route>
         <Route exact path='/signup'>
-          SignUp
+          <Signup signup={signup} />
         </Route>
         <Route exact path='/login'>
-          Login
+          <Login login={login} />
         </Route>
         <Route exact path='/companies/:handle'>
           {/* <Company handle={handle} /> */}
           company
         </Route>
         <Route exact path='/companies'>
-          companiesList
+          <CompanyList />
         </Route>
         <Route exact path='/jobs'>
           JobsList

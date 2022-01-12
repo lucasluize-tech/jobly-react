@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { Button } from "reactstrap";
+import UserContext from "../userContext";
 
-function Home({ isLoggedin, currentUser }) {
+function Home({ isLoggedin }) {
+  const { currentUser } = { currentUser: { username: "Lucas" } };
   return (
     <div className='wrapper'>
       <div className='row align-items-center justify-content-center'>
