@@ -6,24 +6,22 @@ import { useHistory } from "react-router-dom";
 function CompanyList() {
   const [filtered, setFiltered] = useState([]);
   const [companies, setCompanies] = useState([]);
-  const [comp, setComp] = useState("");
+  const [query, setQuery] = useState("");
   const history = useHistory();
-
-  // TODO: FIX THE API CALL TO FIND ANY COMPANY WITH LIKE
+  const [loading, setLoading] = useState(true);
 
   const handleChange = (event) => {
-    let company = event.target.value;
-    setComp(company);
+    let q = event.target.value;
+    setQuery(q);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setFiltered([]);
-    if (comp.length) {
+    if (query.length) {
       try {
-        let company = comp.trim().toLowerCase().split(" ").join("-");
-        let results = await JoblyApi.getCompany(company);
-        setFiltered([results]);
+        let results = await JoblyApi.getCompanies(query);
+        setFiltered(results);
         return;
       } catch (err) {
         console.log(err);
@@ -36,9 +34,15 @@ function CompanyList() {
 
   useEffect(() => {
     async function getCompanies() {
-      let results = await JoblyApi.getAllCompanies();
-      setCompanies(results);
+      try {
+        let results = await JoblyApi.getAllCompanies();
+        setCompanies(results);
+        setLoading(false);
+      } catch (error) {
+        console.log("error with getCompanies API CALL", error);
+      }
     }
+    setLoading(true);
     getCompanies();
   }, []);
 
@@ -48,33 +52,37 @@ function CompanyList() {
         <input
           type='text'
           className='col-10'
-          placeholder='Enter Name...'
+          placeholder='Enter Search term...'
           onChange={handleChange}
-          value={comp}
+          value={query}
         />
         <button type='submit' className='btn btn-primary col-2'>
           Search
         </button>
       </form>
-      {filtered.length
-        ? filtered.map((company) => (
-            <CompanyCard
-              key={company.handle}
-              handle={company.handle}
-              name={company.name}
-              logo={company.logoUrl}
-              description={company.description}
-            />
-          ))
-        : companies.map((company) => (
-            <CompanyCard
-              key={company.handle}
-              handle={company.handle}
-              name={company.name}
-              logo={company.logoUrl}
-              description={company.description}
-            />
-          ))}
+      {loading ? (
+        <h1 className='loading'>Loading...</h1>
+      ) : filtered.length ? (
+        filtered.map((company) => (
+          <CompanyCard
+            key={company.handle}
+            handle={company.handle}
+            name={company.name}
+            logo={company.logoUrl}
+            description={company.description}
+          />
+        ))
+      ) : (
+        companies.map((company) => (
+          <CompanyCard
+            key={company.handle}
+            handle={company.handle}
+            name={company.name}
+            logo={company.logoUrl}
+            description={company.description}
+          />
+        ))
+      )}
     </div>
   );
 }

@@ -6,52 +6,49 @@ import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import NavBar from "./components/Navbar";
 import UserContext from "./userContext";
+import jwt_decode from "jwt-decode";
 
 function App() {
   const [isLoggedin, setIsLoggedin] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
   const [token, setToken] = useState(null);
   const [applicationIds, setApplicationIds] = useState(new Set());
+  const [loading, setLoading] = useState(false);
 
   function applyToJob(id) {
     JoblyApi.applyToJob(currentUser.username, id);
     setApplicationIds(new Set([...applicationIds, id]));
   }
 
-  // useEffect(() => {
-  //   async function getCurrentUser() {
-  //     if (token) {
-  //       try {
-  //         // let { username } = jwt.decode(token);
-  //         // put the token on the Api class so it can use it to call the API.
-  //         JoblyApi.token = token;
-  //         let currentUser = await JoblyApi.getCurrentUser(username);
-  //         setCurrentUser(currentUser);
-  //         setApplicationIds(new Set(currentUser.applications));
-  //       } catch (err) {
-  //         console.error("App loadUserInfo: problem loading", err);
-  //         setCurrentUser(null);
-  //       }
-  //     }
-  //     getCurrentUser();
-  //   }
-  // }, [token]);
+  useEffect(() => {
+    async function getCurrentUser() {
+      if (token) {
+        try {
+          let { username } = jwt_decode(token);
+          JoblyApi.token = token;
+          let currentUser = await JoblyApi.getCurrentUser(username);
+          setCurrentUser(currentUser);
+          setApplicationIds(new Set(currentUser.applications));
+          setIsLoggedin(true);
+          setLoading(false);
+        } catch (err) {
+          console.error("problem loading user", err);
+          setCurrentUser(null);
+        }
+      }
+      setLoading(true);
+      getCurrentUser();
+    }
+  }, [token]);
 
-  /** Handles site-wide logout. */
   function logout() {
     setCurrentUser(null);
     setToken(null);
   }
 
-  /** Handles site-wide signup.
-   *
-   * Automatically logs them in (set token) upon signup.
-   *
-   * Make sure you await this function and check its return value!
-   */
-  async function signup(signupData) {
+  async function signup(data) {
     try {
-      let token = await JoblyApi.signup(signupData);
+      let token = await JoblyApi.signup(data);
       setToken(token);
       return { success: true };
     } catch (errors) {
@@ -60,13 +57,9 @@ function App() {
     }
   }
 
-  /** Handles site-wide login.
-   *
-   * Make sure you await this function and check its return value!
-   */
-  async function login(loginData) {
+  async function login(data) {
     try {
-      let token = await JoblyApi.login(loginData);
+      let token = await JoblyApi.login(data);
       setToken(token);
       return { success: true };
     } catch (errors) {
@@ -75,7 +68,6 @@ function App() {
     }
   }
 
-  /** Checks if a job has been applied for. */
   function hasAppliedToJob(id) {
     return applicationIds.has(id);
   }
