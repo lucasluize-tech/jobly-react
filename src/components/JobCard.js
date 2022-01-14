@@ -2,18 +2,21 @@ import { useState, useContext } from "react";
 import UserContext from "../userContext";
 
 function JobCard({ id, title, salary, equity, companyName }) {
-  const { applyToJob, hasAppliedToJob } = useContext(UserContext);
+  const { applyToJob, hasAppliedToJob, removeJob } = useContext(UserContext);
   const [apply, setApply] = useState(hasAppliedToJob(id));
   const [opacity, setOpacity] = useState(1);
 
   const handleClick = (event) => {
-    applyToJob(id);
-    console.log("applied");
-    setApply(!apply);
-    !apply ? setOpacity(0.4) : setOpacity(1);
+    if (hasAppliedToJob(id)) {
+      setApply(!apply);
+      opacity === 1 ? setOpacity(0.4) : setOpacity(1);
+      removeJob(id);
+    } else {
+      setApply(!apply);
+      !apply ? setOpacity(0.4) : setOpacity(1);
+      applyToJob(id);
+    }
     // I don't think this functionality is necessary for this exercise because
-    // we don't have a route to show all the applications
-    // await JoblyApi.apply(currentUser.username, id);
   };
 
   return (

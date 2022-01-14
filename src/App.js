@@ -7,11 +7,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import NavBar from "./components/Navbar";
 import UserContext from "./userContext";
 import jwt_decode from "jwt-decode";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
-  const [token, setToken] = useState(null);
-  const [applicationIds, setApplicationIds] = useState([]); // maybe unique set?
+  const [token, setToken] = useLocalStorage("jobly_token");
+  const [applicationIds, setApplicationIds] = useState([]);
 
   useEffect(() => {
     async function getCurrentUser() {
@@ -35,6 +36,7 @@ function App() {
   function logout() {
     setCurrentUser(null);
     setToken(null);
+    setApplicationIds([]);
   }
 
   async function signup(data) {
@@ -64,6 +66,12 @@ function App() {
     setApplicationIds([...applicationIds, id]);
   }
 
+  async function removeJob(id) {
+    await JoblyApi.removeJob(currentUser.username, id);
+    const removed = applicationIds.filter((v) => v !== id);
+    setApplicationIds(removed);
+  }
+
   function hasAppliedToJob(id) {
     return applicationIds.includes(id);
   }
@@ -78,6 +86,7 @@ function App() {
             applyToJob,
             hasAppliedToJob,
             applicationIds,
+            removeJob,
           }}>
           <NavBar logout={logout} />
           <Routes login={login} signup={signup} />

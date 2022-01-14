@@ -5,7 +5,7 @@ function CompanyCard({ name, description, logo, handle }) {
   return (
     <NavLink exact to={`/companies/${handle}`} className='compWrapper'>
       <div className='card mb-3 bg-light shadow p-3'>
-        <div className='card-body d-flex text-decoration-none'>
+        <div className='card-body d-flex justify-content-between text-decoration-none'>
           <div>
             <h5>
               <b>{name}</b>
@@ -15,7 +15,7 @@ function CompanyCard({ name, description, logo, handle }) {
             </p>
           </div>
           <div>
-            <img src={logo} alt={handle} />
+            <img className='logo' src={logo} alt={handle} />
           </div>
         </div>
       </div>

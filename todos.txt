@@ -1,0 +1,9 @@
+# What is missing? Any Bugs?
+
+bug - Fix when you log in supposed to redirect to /companies.
+
+useLocalStorage - Implement this functionallity. / COMPLETED /
+
+last step - Need to deploy.
+
+extra - manage to implement removeJob from user applications.

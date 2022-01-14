@@ -13,7 +13,7 @@ function Login({ login }) {
     e.preventDefault();
     try {
       let res = await login(formData);
-      res.success ? history.push("/companies") : setError(res.errors);
+      res.success ? history.push("companies") : setError(res.errors);
     } catch (err) {
       console.log(err);
       setError(err[0]);

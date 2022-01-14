@@ -78,6 +78,10 @@ class JoblyApi {
     await this.request(`users/${username}/jobs/${id}`, {}, "post");
   }
 
+  static async removeJob(username, id) {
+    await this.request(`users/${username}/job/${id}`, {}, "post");
+  }
+
   static async login(data) {
     let res = await this.request(`auth/token`, data, "post");
     return res.token;
