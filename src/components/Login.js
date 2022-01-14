@@ -7,14 +7,16 @@ function Login({ login }) {
     username: "",
     password: "",
   });
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(formData);
-      history.push("/companies");
+      let res = await login(formData);
+      res.success ? history.push("/companies") : setError(res.errors);
     } catch (err) {
       console.log(err);
+      setError(err[0]);
     }
   };
 
@@ -56,6 +58,7 @@ function Login({ login }) {
                   required
                 />
               </div>
+              {error ? <div className='alert alert-danger'>{error}</div> : null}
               <button
                 type='submit'
                 className='btn btn-primary form-control p-2'>

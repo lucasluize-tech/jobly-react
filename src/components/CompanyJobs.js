@@ -13,7 +13,6 @@ export default function CompanyJobs() {
     const getCompany = async () => {
       try {
         const comp = await JoblyApi.getCompany(handle);
-        console.log(comp);
         setCompany(comp);
         setLoading(false);
       } catch (error) {

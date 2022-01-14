@@ -10,8 +10,6 @@ function JobsList() {
   const history = useHistory();
   const [loading, setLoading] = useState(true);
 
-  // TODO: FIX THE API CALL TO FIND ANY COMPANY WITH LIKE
-
   const handleChange = (event) => {
     let job = event.target.value;
     setJob(job);
@@ -68,6 +66,7 @@ function JobsList() {
         filtered.map((j) => (
           <JobCard
             key={j.id}
+            id={j.id}
             title={j.title}
             salary={j.salary}
             equity={j.equity}
@@ -79,6 +78,7 @@ function JobsList() {
         jobs.map((j) => (
           <JobCard
             key={j.id}
+            id={j.id}
             title={j.title}
             salary={j.salary}
             equity={j.equity}

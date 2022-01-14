@@ -1,13 +1,14 @@
 import { useState, useContext } from "react";
-import JoblyApi from "../api";
 import UserContext from "../userContext";
 
 function JobCard({ id, title, salary, equity, companyName }) {
-  const [apply, setApply] = useState(false);
+  const { applyToJob, hasAppliedToJob } = useContext(UserContext);
+  const [apply, setApply] = useState(hasAppliedToJob(id));
   const [opacity, setOpacity] = useState(1);
-  const { currentUser } = useContext(UserContext);
 
-  const handleClick = async (event) => {
+  const handleClick = (event) => {
+    applyToJob(id);
+    console.log("applied");
     setApply(!apply);
     !apply ? setOpacity(0.4) : setOpacity(1);
     // I don't think this functionality is necessary for this exercise because

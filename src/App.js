@@ -9,16 +9,9 @@ import UserContext from "./userContext";
 import jwt_decode from "jwt-decode";
 
 function App() {
-  const [isLoggedin, setIsLoggedin] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [applicationIds, setApplicationIds] = useState(new Set());
-  const [loading, setLoading] = useState(false);
-
-  function applyToJob(id) {
-    JoblyApi.applyToJob(currentUser.username, id);
-    setApplicationIds(new Set([...applicationIds, id]));
-  }
+  const [applicationIds, setApplicationIds] = useState([]); // maybe unique set?
 
   useEffect(() => {
     async function getCurrentUser() {
@@ -26,19 +19,17 @@ function App() {
         try {
           let { username } = jwt_decode(token);
           JoblyApi.token = token;
-          let currentUser = await JoblyApi.getCurrentUser(username);
+
+          let currentUser = await JoblyApi.getUser(username);
           setCurrentUser(currentUser);
-          setApplicationIds(new Set(currentUser.applications));
-          setIsLoggedin(true);
-          setLoading(false);
+          setApplicationIds(currentUser.applications);
         } catch (err) {
           console.error("problem loading user", err);
           setCurrentUser(null);
         }
       }
-      setLoading(true);
-      getCurrentUser();
     }
+    getCurrentUser();
   }, [token]);
 
   function logout() {
@@ -52,7 +43,7 @@ function App() {
       setToken(token);
       return { success: true };
     } catch (errors) {
-      console.error("signup failed", errors);
+      console.error(errors);
       return { success: false, errors };
     }
   }
@@ -63,22 +54,33 @@ function App() {
       setToken(token);
       return { success: true };
     } catch (errors) {
-      console.error("login failed", errors);
+      console.error(errors);
       return { success: false, errors };
     }
   }
 
+  async function applyToJob(id) {
+    await JoblyApi.apply(currentUser.username, id);
+    setApplicationIds([...applicationIds, id]);
+  }
+
   function hasAppliedToJob(id) {
-    return applicationIds.has(id);
+    return applicationIds.includes(id);
   }
 
   return (
     <div className='App'>
       <BrowserRouter>
         <UserContext.Provider
-          value={{ currentUser, setCurrentUser, applyToJob, hasAppliedToJob }}>
-          <NavBar isLoggedin={isLoggedin} logout={logout} />
-          <Routes isLoggedin={isLoggedin} login={login} signup={signup} />
+          value={{
+            currentUser,
+            setCurrentUser,
+            applyToJob,
+            hasAppliedToJob,
+            applicationIds,
+          }}>
+          <NavBar logout={logout} />
+          <Routes login={login} signup={signup} />
         </UserContext.Provider>
       </BrowserRouter>
     </div>

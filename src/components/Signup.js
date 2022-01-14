@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-function Signup({ singup }) {
+function Signup({ signup }) {
   const history = useHistory();
   const [formData, setFormData] = useState({
     username: "",
@@ -10,14 +10,16 @@ function Signup({ singup }) {
     lastName: "",
     email: "",
   });
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await singup(formData);
-      history.push("/companies");
+      const res = await signup(formData);
+      res.succes ? history.push("/companies") : setError(res.errors);
     } catch (err) {
       console.log(err);
+      setError(err[0]);
     }
   };
 
@@ -89,6 +91,7 @@ function Signup({ singup }) {
                   required
                 />
               </div>
+              {error ? <div className='alert alert-danger'>{error}</div> : null}
               <button
                 type='submit'
                 className='btn btn-primary form-control p-2'>

@@ -5,15 +5,15 @@ import Signup from "./components/Signup.js";
 import CompanyList from "./components/CompanyList.js";
 import CompanyJobs from "./components/CompanyJobs.js";
 import JobsList from "./components/JobsList.js";
+import Profile from "./components/Profile.js";
+import AuthRoute from "./AuthRoute";
 
-export default function Router({ isLoggedin, login, signup }) {
-  // let's just create a placeholder for now to test when user is logged in.
-  const { currentUser } = { currentUser: { username: "lucas" } };
+export default function Router({ login, signup }) {
   return (
     <div>
       <Switch>
         <Route exact path='/'>
-          <Home isLoggedin={isLoggedin} currentUser={currentUser} />
+          <Home />
         </Route>
         <Route exact path='/signup'>
           <Signup signup={signup} />
@@ -21,18 +21,18 @@ export default function Router({ isLoggedin, login, signup }) {
         <Route exact path='/login'>
           <Login login={login} />
         </Route>
-        <Route exact path='/companies/:handle'>
+        <AuthRoute exact path='/companies/:handle'>
           <CompanyJobs />
-        </Route>
-        <Route exact path='/companies'>
+        </AuthRoute>
+        <AuthRoute exact path='/companies'>
           <CompanyList />
-        </Route>
-        <Route exact path='/jobs'>
+        </AuthRoute>
+        <AuthRoute exact path='/jobs'>
           <JobsList />
-        </Route>
-        <Route exact path='/profile'>
-          Profile
-        </Route>
+        </AuthRoute>
+        <AuthRoute exact path='/profile'>
+          <Profile />
+        </AuthRoute>
         <Route exact path='*'>
           <h1>404 Ops! There's nothing here</h1>
         </Route>

@@ -3,14 +3,17 @@ import { Link } from "react-router-dom";
 import { Button } from "reactstrap";
 import UserContext from "../userContext";
 
-function Home({ isLoggedin }) {
-  const { currentUser } = { currentUser: { username: "Lucas" } };
+function Home() {
+  // placeHolder just to play around
+  // const { currentUser } = { currentUser: { username: "Lucas" } };
+  const { currentUser } = useContext(UserContext);
+
   return (
     <div className='wrapper'>
       <div className='row align-items-center justify-content-center'>
         <h1>Jobly</h1>
         <p className='my-4'>All the jobs, in one convenient place.</p>
-        {isLoggedin ? (
+        {currentUser ? (
           <div>
             <b>Welcome Back {currentUser.username}</b>
           </div>

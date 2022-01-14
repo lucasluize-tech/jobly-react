@@ -11,9 +11,9 @@ import {
   NavLink,
 } from "reactstrap";
 
-function NavBar({ isLoggedin, logout }) {
+function NavBar({ logout }) {
   const [collapsed, setCollapsed] = useState(false);
-  const { currentUser } = { currentUser: { username: "lucas" } };
+  const { currentUser } = useContext(UserContext);
 
   function toggleNavbar() {
     setCollapsed(!collapsed);
@@ -31,7 +31,7 @@ function NavBar({ isLoggedin, logout }) {
         <NavbarToggler onClick={toggleNavbar} />
         <Collapse isOpen={collapsed} className='justify-content-end' navbar>
           <Nav className='mr-auto' navbar>
-            {isLoggedin ? (
+            {currentUser ? (
               <>
                 <NavItem>
                   <NavLink
@@ -73,7 +73,8 @@ function NavBar({ isLoggedin, logout }) {
                     activeClassName='active'
                     exact
                     to='/'>
-                    {`Logout, ${currentUser.username}`}
+                    {`Logout`}
+                    <i className='fa fa-sign-out'></i>
                   </NavLink>
                 </NavItem>
               </>
