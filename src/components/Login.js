@@ -11,13 +11,14 @@ function Login({ login }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let res;
     try {
-      let res = await login(formData);
-      res.success ? history.push("companies") : setError(res.errors);
+      res = await login(formData);
     } catch (err) {
       console.log(err);
       setError(err[0]);
     }
+    res.success ? history.push("companies") : setError(res.errors);
   };
 
   const handleChange = (e) => {

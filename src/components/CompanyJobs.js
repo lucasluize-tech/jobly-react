@@ -23,7 +23,7 @@ export default function CompanyJobs() {
     };
     setLoading(true);
     getCompany();
-  }, []);
+  }, [handle]);
 
   return (
     <div className='container'>

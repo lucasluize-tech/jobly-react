@@ -14,13 +14,14 @@ function Signup({ signup }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let res;
     try {
-      const res = await signup(formData);
-      res.succes ? history.push("/companies") : setError(res.errors);
+      res = await signup(formData);
     } catch (err) {
       console.log(err);
       setError(err[0]);
     }
+    res.succes ? history.push("/companies") : setError(res.errors);
   };
 
   const handleChange = (e) => {
