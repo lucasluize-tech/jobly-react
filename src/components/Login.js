@@ -18,7 +18,9 @@ function Login({ login }) {
       console.log(err);
       setError(err[0]);
     }
-    res.success ? history.push("companies") : setError(res.errors);
+    setTimeout(() => {
+      res.success ? history.push("/companies") : setError(res.errors);
+    }, 500); // added this because setting currentUser was racing, so I can't redirect.
   };
 
   const handleChange = (e) => {

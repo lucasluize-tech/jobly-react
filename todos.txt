@@ -1,6 +1,7 @@
 # What is missing? Any Bugs?
 
-bug - Fix when you log in supposed to redirect to companies route. / FIXED /
+bug - Fix when you log in supposed to redirect to companies route.
+/FIXED/ not the right way i think. Bypassed the racing with a SetTimeout to redirect
 
 useLocalStorage - Implement this functionallity. / COMPLETED /
 

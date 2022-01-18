@@ -21,7 +21,9 @@ function Signup({ signup }) {
       console.log(err);
       setError(err[0]);
     }
-    res.succes ? history.push("/companies") : setError(res.errors);
+    setTimeout(() => {
+      res.success ? history.push("/companies") : setError(res.errors);
+    }, 500);
   };
 
   const handleChange = (e) => {

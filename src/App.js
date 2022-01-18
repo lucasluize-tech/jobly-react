@@ -24,12 +24,14 @@ function App() {
           let currentUser = await JoblyApi.getUser(username);
           setCurrentUser(currentUser);
           setApplicationIds(currentUser.applications);
+          console.log("now curreUser is active");
         } catch (err) {
           console.error("problem loading user", err);
           setCurrentUser(null);
         }
       }
     }
+
     getCurrentUser();
   }, [token]);
 
